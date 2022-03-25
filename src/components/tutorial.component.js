@@ -13,45 +13,45 @@ export default class Tutorial extends Component {
 
     this.state = {
       currentTutorial: {
-        id: null,
-        title: "",
-        description: "",
-        published: false
+        name: null,
+        element: "",
+        tier: "",
+        weaponType: ""
       },
       message: ""
     };
   }
 
   componentDidMount() {
-    this.getTutorial(this.props.match.params.id);
+    this.getTutorial(this.props.match.params.name);
   }
 
   onChangeTitle(e) {
-    const title = e.target.value;
+    const name = e.target.value;
 
     this.setState(function(prevState) {
       return {
         currentTutorial: {
           ...prevState.currentTutorial,
-          title: title
+          name: name
         }
       };
     });
   }
 
   onChangeDescription(e) {
-    const description = e.target.value;
+    const element = e.target.value;
     
     this.setState(prevState => ({
       currentTutorial: {
         ...prevState.currentTutorial,
-        description: description
+        element: element
       }
     }));
   }
 
-  getTutorial(id) {
-    TutorialDataService.get(id)
+  getTutorial(name) {
+    TutorialDataService.get(name)
       .then(response => {
         this.setState({
           currentTutorial: response.data
@@ -65,18 +65,17 @@ export default class Tutorial extends Component {
 
   updatePublished(status) {
     var data = {
-      id: this.state.currentTutorial.id,
-      title: this.state.currentTutorial.title,
-      description: this.state.currentTutorial.description,
-      published: status
+      name: this.state.currentTutorial.name,
+      element: this.state.currentTutorial.element,
+      tier: this.state.currentTutorial.tier,
+      weaponType: this.state.currentTutorial.weaponType
     };
 
-    TutorialDataService.update(this.state.currentTutorial.id, data)
+    TutorialDataService.update(this.state.currentTutorial.name, data)
       .then(response => {
         this.setState(prevState => ({
           currentTutorial: {
-            ...prevState.currentTutorial,
-            published: status
+            ...prevState.currentTutorial
           }
         }));
         console.log(response.data);
@@ -88,7 +87,7 @@ export default class Tutorial extends Component {
 
   updateTutorial() {
     TutorialDataService.update(
-      this.state.currentTutorial.id,
+      this.state.currentTutorial.name,
       this.state.currentTutorial
     )
       .then(response => {
@@ -103,10 +102,10 @@ export default class Tutorial extends Component {
   }
 
   deleteTutorial() {    
-    TutorialDataService.delete(this.state.currentTutorial.id)
+    TutorialDataService.delete(this.state.currentTutorial.name)
       .then(response => {
         console.log(response.data);
-        this.props.history.push('/tutorials')
+        this.props.history.push('/characters')
       })
       .catch(e => {
         console.log(e);
@@ -128,7 +127,7 @@ export default class Tutorial extends Component {
                   type="text"
                   className="form-control"
                   id="title"
-                  value={currentTutorial.title}
+                  value={currentTutorial.name}
                   onChange={this.onChangeTitle}
                 />
               </div>
@@ -138,7 +137,7 @@ export default class Tutorial extends Component {
                   type="text"
                   className="form-control"
                   id="description"
-                  value={currentTutorial.description}
+                  value={currentTutorial.element}
                   onChange={this.onChangeDescription}
                 />
               </div>
@@ -151,21 +150,7 @@ export default class Tutorial extends Component {
               </div>
             </form>
 
-            {currentTutorial.published ? (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updatePublished(false)}
-              >
-                UnPublish
-              </button>
-            ) : (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updatePublished(true)}
-              >
-                Publish
-              </button>
-            )}
+          
 
             <button
               className="badge badge-danger mr-2"

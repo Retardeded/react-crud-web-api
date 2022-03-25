@@ -4,46 +4,62 @@ import TutorialDataService from "../services/tutorial.service";
 export default class AddTutorial extends Component {
   constructor(props) {
     super(props);
-    this.onChangeTitle = this.onChangeTitle.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeName = this.onChangeName.bind(this);
+    this.onChangeElement = this.onChangeElement.bind(this);
+    this.onChangeTier = this.onChangeTier.bind(this);
+    this.onChangeWeaponType = this.onChangeWeaponType.bind(this);
     this.saveTutorial = this.saveTutorial.bind(this);
     this.newTutorial = this.newTutorial.bind(this);
 
     this.state = {
-      id: null,
-      title: "",
-      description: "", 
-      published: false,
+      name: null,
+      element: "",
+      tier: "", 
+      weaponType: "",
 
       submitted: false
     };
   }
 
-  onChangeTitle(e) {
+  onChangeName(e) {
     this.setState({
-      title: e.target.value
+      name: e.target.value
     });
   }
 
-  onChangeDescription(e) {
+  onChangeElement(e) {
     this.setState({
-      description: e.target.value
+      element: e.target.value
+    });
+  }
+
+  onChangeTier(e) {
+    this.setState({
+      tier: e.target.value
+    });
+  }
+
+  onChangeWeaponType(e) {
+    this.setState({
+      weaponType: e.target.value
     });
   }
 
   saveTutorial() {
     var data = {
-      title: this.state.title,
-      description: this.state.description
+      name: this.state.name,
+      element: this.state.element,
+      tier: this.state.tier,
+      weaponType: this.state.weaponType
     };
 
     TutorialDataService.create(data)
       .then(response => {
         this.setState({
-          id: response.data.id,
-          title: response.data.title,
-          description: response.data.description,
-          published: response.data.published,
+          name: response.data.name,
+          element: response.data.element,
+          tier: response.data.tier,
+          weaponType: response.data.weaponType,
 
           submitted: true
         });
@@ -56,10 +72,10 @@ export default class AddTutorial extends Component {
 
   newTutorial() {
     this.setState({
-      id: null,
-      title: "",
-      description: "",
-      published: false,
+      name: null,
+      element: "",
+      tier: "",
+      weaponType: "",
 
       submitted: false
     });
@@ -78,28 +94,55 @@ export default class AddTutorial extends Component {
         ) : (
           <div>
             <div className="form-group">
-              <label htmlFor="title">Title</label>
+              <label htmlFor="name">Name</label>
               <input
                 type="text"
                 className="form-control"
-                id="title"
+                id="name"
                 required
-                value={this.state.title}
-                onChange={this.onChangeTitle}
-                name="title"
+                value={this.state.name}
+                onChange={this.onChangeName
+          }
+                name="name"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="description">Element</label>
               <input
                 type="text"
                 className="form-control"
-                id="description"
+                id="element"
                 required
-                value={this.state.description}
-                onChange={this.onChangeDescription}
-                name="description"
+                value={this.state.element}
+                onChange={this.onChangeElement}
+                name="element"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="tier">Tier</label>
+              <input
+                type="text"
+                className="form-control"
+                id="tier"
+                required
+                value={this.state.tier}
+                onChange={this.onChangeTier}
+                name="tier"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="weaponType">Weapon Type</label>
+              <input
+                type="text"
+                className="form-control"
+                id="weaponType"
+                required
+                value={this.state.weaponType}
+                onChange={this.onChangeWeaponType}
+                name="weaponType"
               />
             </div>
 
