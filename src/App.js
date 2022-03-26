@@ -3,9 +3,9 @@ import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import AddTutorial from "./components/add-tutorial.component";
-import Tutorial from "./components/tutorial.component";
-import TutorialsList from "./components/tutorials-list.component";
+import AddCharacter from "./components/add-tutorial.component";
+import Character from "./components/tutorial.component";
+import CharactersList from "./components/tutorials-list.component";
 
 class App extends Component {
   render() {
@@ -31,9 +31,9 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/characters"]} component={TutorialsList} />
-            <Route exact path="/add" component={AddTutorial} />
-            <Route path="/characters/:name" component={Tutorial} />
+            <Route exact path={["/", "/characters"]} component={CharactersList} />
+            <Route exact path="/add" component={AddCharacter} />
+            <Route path="/characters/:name" component={Character} />
           </Switch>
         </div>
       </div>

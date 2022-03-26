@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TutorialDataService from "../services/tutorial.service";
 
-export default class Tutorial extends Component {
+export default class Character extends Component {
   constructor(props) {
     super(props);
     this.onChangeTitle = this.onChangeTitle.bind(this);
@@ -122,21 +122,21 @@ export default class Tutorial extends Component {
             <h4>Tutorial</h4>
             <form>
               <div className="form-group">
-                <label htmlFor="title">Title</label>
+                <label htmlFor="name">Name</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="title"
+                  id="name"
                   value={currentTutorial.name}
                   onChange={this.onChangeTitle}
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="description">Description</label>
+                <label htmlFor="element">Element</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="description"
+                  id="element"
                   value={currentTutorial.element}
                   onChange={this.onChangeDescription}
                 />

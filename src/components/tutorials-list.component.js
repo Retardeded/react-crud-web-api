@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import TutorialDataService from "../services/tutorial.service";
 import { Link } from "react-router-dom";
 
-export default class TutorialsList extends Component {
+export default class CharactersList extends Component {
   constructor(props) {
     super(props);
     this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this);
@@ -14,9 +14,11 @@ export default class TutorialsList extends Component {
 
     this.state = {
       tutorials: [],
+      filteredCharacters: [],
       currentTutorial: null,
       currentIndex: -1,
-      searchTitle: ""
+      searchTitle: "",
+      doFiltering: false
     };
   }
 
@@ -27,8 +29,10 @@ export default class TutorialsList extends Component {
   onChangeSearchTitle(e) {
     const searchTitle = e.target.value;
 
+
     this.setState({
-      searchTitle: searchTitle
+      searchTitle: searchTitle,
+      doFiltering: searchTitle != ""
     });
   }
 
@@ -36,7 +40,8 @@ export default class TutorialsList extends Component {
     TutorialDataService.getAll()
       .then(response => {
         this.setState({
-          tutorials: response.data
+          tutorials: response.data,
+          filteredCharacters: response.data
         });
         console.log(response.data);
       })
@@ -77,7 +82,7 @@ export default class TutorialsList extends Component {
       currentIndex: -1
     });
 
-    TutorialDataService.findByTitle(this.state.searchTitle)
+    TutorialDataService.findByElement(this.state.searchTitle)
       .then(response => {
         this.setState({
           tutorials: response.data
@@ -90,7 +95,7 @@ export default class TutorialsList extends Component {
   }
 
   render() {
-    const { searchTitle, tutorials, currentTutorial, currentIndex } = this.state;
+    const { searchTitle, tutorials, doFiltering, filteredCharacters, currentTutorial, currentIndex } = this.state;
 
     return (
       <div className="list row">
@@ -99,7 +104,7 @@ export default class TutorialsList extends Component {
             <input
               type="text"
               className="form-control"
-              placeholder="Search by title"
+              placeholder="Search by element"
               value={searchTitle}
               onChange={this.onChangeSearchTitle}
             />
@@ -118,19 +123,35 @@ export default class TutorialsList extends Component {
           <h4>Tutorials List</h4>
 
           <ul className="list-group">
-            {tutorials &&
-              tutorials.map((tutorial, index) => (
-                <li
-                  className={
-                    "list-group-item " +
-                    (index === currentIndex ? "active" : "")
-                  }
-                  onClick={() => this.setActiveTutorial(tutorial, index)}
-                  key={index}
-                >
-                  {tutorial.title}
-                </li>
-              ))}
+
+          {doFiltering ? (
+
+
+         filteredCharacters.filter(person => person.element.includes(searchTitle)).map((tutorial, index) => (
+          <li
+            className={
+              "list-group-item " +
+              (index === currentIndex ? "active" : "")
+            }
+            onClick={() => this.setActiveTutorial(tutorial, index)}
+            key={index}
+          >
+            {tutorial.name}
+          </li>
+      ))) : (
+        filteredCharacters.map((tutorial, index) => (
+          <li
+            className={
+              "list-group-item " +
+              (index === currentIndex ? "active" : "")
+            }
+            onClick={() => this.setActiveTutorial(tutorial, index)}
+            key={index}
+          >
+            {tutorial.name}
+          </li>
+      )))
+        }
           </ul>
 
           <button
@@ -143,18 +164,30 @@ export default class TutorialsList extends Component {
         <div className="col-md-6">
           {currentTutorial ? (
             <div>
-              <h4>Tutorial</h4>
+              <h4>Character</h4>
               <div>
                 <label>
-                  <strong>Title:</strong>
+                  <strong>Name:</strong>
                 </label>{" "}
-                {currentTutorial.title}
+                {currentTutorial.name}
               </div>
               <div>
                 <label>
-                  <strong>Description:</strong>
+                  <strong>Element:</strong>
                 </label>{" "}
-                {currentTutorial.description}
+                {currentTutorial.element}
+              </div>
+              <div>
+                <label>
+                  <strong>Tier:</strong>
+                </label>{" "}
+                {currentTutorial.tier}
+              </div>
+              <div>
+                <label>
+                  <strong>Weapon Type:</strong>
+                </label>{" "}
+                {currentTutorial.weaponType}
               </div>
               <div>
                 <label>
@@ -164,7 +197,7 @@ export default class TutorialsList extends Component {
               </div>
 
               <Link
-                to={"/tutorials/" + currentTutorial.id}
+                to={"/characters/" + currentTutorial.name}
                 className="badge badge-warning"
               >
                 Edit
